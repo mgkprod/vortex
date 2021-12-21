@@ -1,16 +1,10 @@
 <template>
-  <div class="w-full max-w-lg mx-auto">
-    <form class="flex flex-col p-8 mx-auto bg-white shadow-xl shadow-gray-200" @submit.prevent="submit">
-      <div class="font-bold">Sign in to your account</div>
+  <div class="w-full max-w-md mx-auto">
+    <form class="flex flex-col p-10 mx-auto bg-white rounded-md shadow-xl shadow-gray-200" @submit.prevent="submit">
+      <form-input class="mb-6" label="Email" v-model="form.email" :error="form.errors.email" autofocus autocomplete="email" />
+      <form-input class="mb-6" label="Password" type="password" v-model="form.password" :error="form.errors.password" autocomplete="current-password" />
 
-      <hr class="w-full my-4 border-gray-200" />
-
-      <form-input label="Email" placeholder="Your email address" v-model="form.email" :errors="$page.props.errors.email" autofocus autocomplete="email" />
-      <form-input class="mt-4" label="Password" placeholder="Your password" type="password" v-model="form.password" :errors="$page.props.errors.password" autocomplete="current-password" />
-
-      <div class="flex justify-end mt-8">
-        <button class="inline-block px-4 py-2 text-sm font-bold transition duration-200 ease-in-out bg-gray-200 hover:bg-gray-300 hover:text-black focus:outline-none"><i class="mr-1 fas fa-sign-in-alt"></i> Sign in</button>
-      </div>
+      <button class="inline-block disabled:opacity-60 w-full px-4 py-3 mt-4 font-bold text-sm transition duration-200 rounded-md ease-in-out bg-[#0194F6] hover:bg-[#0095e8] text-white focus:outline-none"><i class="mr-1 opacity-50 fas fa-sign-in-alt"></i> Continue</button>
     </form>
   </div>
 </template>
@@ -21,18 +15,17 @@ export default {
 
   data() {
     return {
-      form: {
+      form: this.$inertia.form({
         email: '',
         password: '',
-      },
+      }),
     };
   },
 
   methods: {
     submit() {
-      this.$page.props.errors = {};
-
-      this.$inertia.post(this.route('login'), { ...this.form });
+      this.form.clearErrors();
+      this.form.post(this.route('login'));
 
       this.form.password = '';
     },

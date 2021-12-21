@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-class DashboardController extends Controller
+class OverviewController extends Controller
 {
     public function __invoke()
     {
-        return inertia('dashboard');
+        return inertia('overview');
     }
 }

@@ -14,13 +14,7 @@
 
         @routes
     </head>
-    <body class="flex flex-col h-full min-h-screen antialiased text-gray-700 transition duration-200 bg-gray-50">
-        <div class="absolute top-0 left-0 right-0 w-auto text-gray-100 -z-10">
-            <svg class="w-full" viewBox="0 0 1440 600" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M1440 0H0V600L1440 0Z" fill="currentColor"/>
-            </svg>
-        </div>
-
+    <body class="flex flex-col h-full min-h-screen antialiased text-[#5e6278] transition duration-200 bg-[#f3f6f9]">
         @inertia
     </body>
 </html>

@@ -38,33 +38,14 @@ class HandleInertiaRequests extends Middleware
     {
         return array_merge(parent::share($request), [
             'appName' => fn () => config('app.name'),
-            'authUser' => function () use ($request) {
-                if (! $request->user()) {
-                    return null;
-                }
-
-                return $request->user()->only('id', 'name', 'email');
-            },
-            'errors' => fn () => $this->sharedValidationErrors($request),
+            'auth.user' => fn () => $request->user()
+                ? $request->user()->only('id', 'name', 'email')
+                : null,
             'flash' => fn () => [
                 'success' => $request->session()->get('success'),
                 'warning' => $request->session()->get('warning'),
                 'error' => $request->session()->get('error'),
             ],
         ]);
-    }
-
-    /**
-     * Resolve shared validation errors.
-     *
-     * @return \Illuminate\Contracts\Support\MessageBag|\stdClass
-     */
-    protected function sharedValidationErrors($request)
-    {
-        if ($errors = $request->session()->get('errors')) {
-            return $errors->getBag('default');
-        }
-
-        return new \stdClass;
     }
 }

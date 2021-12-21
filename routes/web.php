@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\MonitorController;
+use App\Http\Controllers\OverviewController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,6 +23,14 @@ Auth::routes([
 ]);
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::redirect('/', '/dashboard')->name('index');
-    Route::get('/dashboard', DashboardController::class)->name('dashboard');
+    Route::redirect('/', '/overview')->name('index');
+    Route::get('/overview', OverviewController::class)->name('overview');
+
+    Route::get('monitors/create', [MonitorController::class, 'create'])->name('monitors.create');
+    Route::post('monitors', [MonitorController::class, 'store'])->name('monitors.store');
+    Route::get('monitors/{monitor}', [MonitorController::class, 'show'])->name('monitors.show');
+    Route::get('monitors/{monitor}/edit', [MonitorController::class, 'edit'])->name('monitors.edit');
+    Route::put('monitors/{monitor}', [MonitorController::class, 'update'])->name('monitors.update');
+    Route::get('monitors/{monitor}/delete', [MonitorController::class, 'delete'])->name('monitors.delete');
+    Route::delete('monitors/{monitor}', [MonitorController::class, 'destroy'])->name('monitors.destroy');
 });

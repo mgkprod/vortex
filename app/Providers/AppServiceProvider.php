@@ -27,8 +27,8 @@ class AppServiceProvider extends ServiceProvider
         $sha = rescue(fn () => ' (' . substr(File::get(base_path('REVISION')), 0, 7) . ')', null, false);
         $env = config('app.env') == 'production' ? '' : ' - ' . config('app.env');
 
-        // view()->share('version', $version . $sha . $env);
-        inertia()->share('version', $version . $sha . $env);
+        // view()->share('appVersion', $version . $sha . $env);
+        inertia()->share('appVersion', $version . $sha . $env);
     }
 
     /**
