@@ -60,7 +60,7 @@ class CheckMonitorJob implements ShouldQueue
                 );
 
                 $heartbeat->status = $responseTime != -1 ? Heartbeat::STATUS_UP : Heartbeat::STATUS_DOWN;
-                $heartbeat->response_time = $responseTime;
+                $heartbeat->response_time = ($responseTime / 1000);
 
                 break;
         }

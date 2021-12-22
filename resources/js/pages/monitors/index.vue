@@ -36,7 +36,7 @@
               <div v-else-if="monitor.uptime <= 98" class="px-2 py-1 text-xs inline font-bold rounded-md bg-[#fff8dd] text-[#ffc700]">{{ monitor.uptime }}%</div>
               <div v-else class="px-2 py-1 text-xs inline font-bold rounded-md bg-[#e8fff3] text-[#50cd89]">{{ monitor.uptime }}%</div>
             </td>
-            <td class="px-4 py-3">{{ Math.round(monitor.latest_heartbeat.response_time * 100) / 100 }}ms</td>
+            <td class="px-4 py-3">{{ Math.round(monitor.latest_heartbeat.response_time * 100) / 100 }}s</td>
             <td class="px-4 py-3">{{ moment(monitor.latest_heartbeat.created_at).fromNow() }}</td>
             <td class="px-4 py-3 text-right">
               <inertia-link class="inline-block px-4 py-3 font-bold text-sm transition duration-200 rounded-md ease-in-out text-[#a1a5b7] bg-[#f5f8fa] hover:text-[#0194F6]" :href="route('monitors.edit', monitor)"> <i class="fa fa-edit"></i> </inertia-link>
