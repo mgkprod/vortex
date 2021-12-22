@@ -2,8 +2,11 @@
 
 namespace App\Jobs;
 
+use App\Events\MonitorDownEvent;
+use App\Events\MonitorRecoveredEvent;
 use App\Models\Heartbeat;
 use App\Models\Monitor;
+use App\Notifications\MonitorUpNotification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -16,11 +19,9 @@ class CheckMonitorJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected Monitor $monitor;
-
-    public function __construct(Monitor $monitor)
-    {
-        $this->monitor = $monitor;
+    public function __construct(
+        protected Monitor $monitor,
+    ) {
     }
 
     public function handle()
@@ -65,6 +66,21 @@ class CheckMonitorJob implements ShouldQueue
                 break;
         }
 
+        $latestHeartbeat = $this->monitor->latestHeartbeat;
+
         $heartbeat->save();
+
+        if (! $latestHeartbeat || $heartbeat->status != $latestHeartbeat->status) {
+            $instance = $heartbeat->status
+                ? (! $latestHeartbeat
+                    ? new MonitorUpNotification()
+                    : new MonitorRecoveredEvent($this->monitor
+                        ->heartbeats()
+                        ->where('status', Heartbeat::STATUS_UP)
+                        ->take(1)
+                        ->first()))
+                : new MonitorDownEvent($heartbeat);
+            $this->monitor->notify($instance);
+        }
     }
 }

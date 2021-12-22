@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 class Monitor extends Model
 {
-    use HasFactory;
+    use HasFactory, Notifiable;
 
     const TYPE_HTTP = 1;
     const TYPE_KEYWORD = 2;
