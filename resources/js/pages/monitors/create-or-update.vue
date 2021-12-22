@@ -4,7 +4,7 @@
       <div v-if="!monitor">
         <div class="font-bold">Create a new monitor</div>
         <ol class="inline-flex text-sm flex-row items-center space-x-1 text-[#979BAE]">
-          <li><inertia-link class="transition duration-200 ease-in-out hover:opacity-80" :href="route('overview')">Monitors</inertia-link></li>
+          <li><inertia-link class="transition duration-200 ease-in-out hover:opacity-80" :href="route('monitors.index')">Monitors</inertia-link></li>
           <li>&bullet;</li>
           <li class="text-[#a1a5b7]">Create</li>
         </ol>
@@ -12,7 +12,7 @@
       <div v-else>
         <div class="font-bold">Update {{ monitor.name }}</div>
         <ol class="inline-flex text-sm flex-row items-center space-x-1 text-[#979BAE]">
-          <li><inertia-link class="transition duration-200 ease-in-out hover:opacity-80" :href="route('overview')">Monitors</inertia-link></li>
+          <li><inertia-link class="transition duration-200 ease-in-out hover:opacity-80" :href="route('monitors.index')">Monitors</inertia-link></li>
           <li>&bullet;</li>
           <li>
             <inertia-link class="transition duration-200 ease-in-out hover:opacity-80" :href="route('monitors.show', monitor)">{{ monitor.name }}</inertia-link>

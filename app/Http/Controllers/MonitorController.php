@@ -7,6 +7,15 @@ use App\Models\User;
 
 class MonitorController extends Controller
 {
+    public function index()
+    {
+        $monitors = auth()->user()->monitors;
+
+        return inertia('monitors/index', [
+            'monitors' => $monitors,
+        ]);
+    }
+
     public function show(Monitor $monitor)
     {
         $this->checkMonitorOwnership($monitor);
@@ -30,11 +39,20 @@ class MonitorController extends Controller
         $monitor = new Monitor();
         $monitor->type = request()->type;
         $monitor->name = request()->name;
-        $monitor->configuration = [];
+
+        $configuration = $monitor->configuration ?? [];
+
+        $configuration['host'] = request()->host;
+        $configuration['keyword'] = request()->keyword;
+        $configuration['fails'] = request()->fails;
+        $configuration['port'] = request()->port;
+
+        $monitor->configuration = $configuration;
+
         $monitor->user()->associate(auth()->user());
         $monitor->save();
 
-        return redirect()->route('overview')->with('success', 'Monitor sucessfuly created.');
+        return redirect()->route('monitors.index')->with('success', 'Monitor sucessfuly created.');
     }
 
     public function edit(Monitor $monitor)
@@ -55,7 +73,15 @@ class MonitorController extends Controller
 
         $monitor->type = request()->type;
         $monitor->name = request()->name;
-        $monitor->configuration = [];
+
+        $configuration = $monitor->configuration ?? [];
+
+        $configuration['host'] = request()->host;
+        $configuration['keyword'] = request()->keyword;
+        $configuration['fails'] = request()->fails;
+        $configuration['port'] = request()->port;
+
+        $monitor->configuration = $configuration;
         $monitor->save();
 
         return redirect()->route('monitors.show', $monitor)->with('success', 'Monitor sucessfuly updated.');
@@ -77,7 +103,7 @@ class MonitorController extends Controller
         $monitor->heartbeats()->delete();
         $monitor->delete();
 
-        return redirect()->route('overview')->with('success', 'Monitor sucessfuly deleted.');
+        return redirect()->route('monitors.index')->with('success', 'Monitor sucessfuly deleted.');
     }
 
     protected function checkMonitorOwnership(Monitor $monitor, User $user = null)

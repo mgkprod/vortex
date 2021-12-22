@@ -12,7 +12,7 @@ class Heartbeat extends Model
     const STATUS_DOWN = 0;
     const STATUS_UP = 1;
 
-    protected $timestamps = false;
+    public $timestamps = false;
 
     protected $casts = [
         'created_at' => 'datetime',

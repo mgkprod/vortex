@@ -14,15 +14,8 @@
         <div class="container px-8 py-4 mx-auto">
           <div class="flex items-center justify-between">
             <div class="flex flex-row items-center space-x-1">
-              <inertia-link
-                :href="route('overview')"
-                :class="{
-                  'bg-[#3B3A4A]': route().current('overview*'),
-                }"
-                class="inline-block px-4 py-2 text-sm font-bold transition duration-200 ease-in-out rounded-md hover:bg-[#3B3A4A]"
-              >
-                <i class="mr-1 opacity-50 fas fa-chart-line"></i> Overview
-              </inertia-link>
+              <inertia-link :href="route('overview')" :class="{ 'bg-[#3B3A4A]': route().current('overview*') }" class="inline-block px-4 py-2 text-sm font-bold transition duration-200 ease-in-out rounded-md hover:bg-[#3B3A4A]"> <i class="mr-1 opacity-50 fas fa-chart-line"></i> Overview </inertia-link>
+              <inertia-link :href="route('monitors.index')" :class="{ 'bg-[#3B3A4A]': route().current('monitors*') }" class="inline-block px-4 py-2 text-sm font-bold transition duration-200 ease-in-out rounded-md hover:bg-[#3B3A4A]"> <i class="mr-1 opacity-50 fas fa-chart-line"></i> Monitors </inertia-link>
             </div>
 
             <button type="button" class="inline-block px-4 py-2 text-sm font-bold transition duration-200 ease-in-out rounded-md hover:bg-[#3B3A4A] focus:outline-none" @click="$inertia.post(route('logout'))"><i class="fas fa-sign-out-alt"></i></button>

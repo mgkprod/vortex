@@ -26,6 +26,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::redirect('/', '/overview')->name('index');
     Route::get('/overview', OverviewController::class)->name('overview');
 
+    Route::get('monitors', [MonitorController::class, 'index'])->name('monitors.index');
     Route::get('monitors/create', [MonitorController::class, 'create'])->name('monitors.create');
     Route::post('monitors', [MonitorController::class, 'store'])->name('monitors.store');
     Route::get('monitors/{monitor}', [MonitorController::class, 'show'])->name('monitors.show');
