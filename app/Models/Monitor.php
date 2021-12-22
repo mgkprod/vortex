@@ -51,6 +51,10 @@ class Monitor extends Model
         $counts[Heartbeat::STATUS_UP] ??= 0;
         $counts[Heartbeat::STATUS_DOWN] ??= 0;
 
-        return round($counts[Heartbeat::STATUS_UP] / ($counts[Heartbeat::STATUS_UP] + $counts[Heartbeat::STATUS_DOWN]) * 100, 2);
+        try {
+            return round($counts[Heartbeat::STATUS_UP] / ($counts[Heartbeat::STATUS_UP] + $counts[Heartbeat::STATUS_DOWN]) * 100, 2);
+        } catch (\Throwable $th) {
+            return -1;
+        }
     }
 }
