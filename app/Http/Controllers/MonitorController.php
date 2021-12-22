@@ -9,7 +9,13 @@ class MonitorController extends Controller
 {
     public function index()
     {
-        $monitors = auth()->user()->monitors;
+        $monitors = auth()->user()
+            ->monitors()
+            ->orderBy('created_at', 'DESC')
+            ->with('latestHeartbeat')
+            ->get();
+
+        $monitors->each(fn ($monitor) => $monitor->append('uptime'));
 
         return inertia('monitors/index', [
             'monitors' => $monitors,

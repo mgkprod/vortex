@@ -20,7 +20,7 @@
             <th class="px-4 py-3 text-left">Status</th>
             <th class="px-4 py-3 text-left">Uptime</th>
             <th class="px-4 py-3 text-left">Response</th>
-            <th class="px-4 py-3 text-left">Last check</th>
+            <th class="px-4 py-3 text-left">Lastest check</th>
             <th class="px-4 py-3 rounded-tr-md"></th>
           </tr>
         </thead>
@@ -28,13 +28,16 @@
           <tr v-for="monitor in monitors" v-bind:key="monitor.id" class="border-t border-[#eff2f5]">
             <td class="px-4 py-3">{{ monitor.name }}</td>
             <td class="px-4 py-3">
-              <div class="px-2 py-1 text-xs inline font-bold rounded-md bg-[#e8fff3] text-[#50cd89]">OK</div>
-              <div class="px-2 py-1 text-xs inline font-bold rounded-md bg-[#fff8dd] text-[#ffc700]">WRN</div>
-              <div class="px-2 py-1 text-xs inline font-bold rounded-md bg-[#fff5f8] text-[#f1416c]">ERR</div>
+              <div v-if="monitor.latest_heartbeat.status == 0" class="px-2 py-1 text-xs inline font-bold rounded-md bg-[#fff5f8] text-[#f1416c]">ERR</div>
+              <div v-if="monitor.latest_heartbeat.status == 1" class="px-2 py-1 text-xs inline font-bold rounded-md bg-[#e8fff3] text-[#50cd89]">OK</div>
             </td>
-            <td class="px-4 py-3">-</td>
-            <td class="px-4 py-3">-</td>
-            <td class="px-4 py-3">-</td>
+            <td class="px-4 py-3">
+              <div v-if="monitor.uptime <= 90" class="px-2 py-1 text-xs inline font-bold rounded-md bg-[#fff5f8] text-[#f1416c]">{{ monitor.uptime }}%</div>
+              <div v-else-if="monitor.uptime <= 98" class="px-2 py-1 text-xs inline font-bold rounded-md bg-[#fff8dd] text-[#ffc700]">{{ monitor.uptime }}%</div>
+              <div v-else class="px-2 py-1 text-xs inline font-bold rounded-md bg-[#e8fff3] text-[#50cd89]">{{ monitor.uptime }}%</div>
+            </td>
+            <td class="px-4 py-3">{{ Math.round(monitor.latest_heartbeat.response_time * 100) / 100 }}ms</td>
+            <td class="px-4 py-3">{{ moment(monitor.latest_heartbeat.created_at).fromNow() }}</td>
             <td class="px-4 py-3 text-right">
               <inertia-link class="inline-block px-4 py-3 font-bold text-sm transition duration-200 rounded-md ease-in-out text-[#a1a5b7] bg-[#f5f8fa] hover:text-[#0194F6]" :href="route('monitors.edit', monitor)"> <i class="fa fa-edit"></i> </inertia-link>
               <inertia-link class="inline-block px-4 py-3 font-bold text-sm transition duration-200 rounded-md ease-in-out text-[#a1a5b7] bg-[#f5f8fa] hover:text-[#0194F6]" :href="route('monitors.delete', monitor)"> <i class="fa fa-trash"></i> </inertia-link>
