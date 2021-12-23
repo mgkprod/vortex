@@ -2,10 +2,10 @@
 
 namespace App\Jobs;
 
-use App\Events\MonitorDownEvent;
-use App\Events\MonitorRecoveredEvent;
 use App\Models\Heartbeat;
 use App\Models\Monitor;
+use App\Notifications\MonitorDownNotification;
+use App\Notifications\MonitorRecoveredNotification;
 use App\Notifications\MonitorUpNotification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -73,13 +73,9 @@ class CheckMonitorJob implements ShouldQueue
         if (! $latestHeartbeat || $heartbeat->status != $latestHeartbeat->status) {
             $instance = $heartbeat->status
                 ? (! $latestHeartbeat
-                    ? new MonitorUpNotification()
-                    : new MonitorRecoveredEvent($this->monitor
-                        ->heartbeats()
-                        ->where('status', Heartbeat::STATUS_UP)
-                        ->take(1)
-                        ->first()))
-                : new MonitorDownEvent($heartbeat);
+                    ? new MonitorUpNotification($heartbeat)
+                    : new MonitorRecoveredNotification($heartbeat))
+                : new MonitorDownNotification($heartbeat);
             $this->monitor->notify($instance);
         }
     }

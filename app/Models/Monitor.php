@@ -41,21 +41,28 @@ class Monitor extends Model
 
     public function getUptimeAttribute()
     {
-        $counts = $this
-            ->hasMany(Heartbeat::class)
-            ->selectRaw('status, count(*) as count')
-            ->whereBetween('created_at', [carbon()->subDays(7), carbon()])
-            ->groupBy('status')
-            ->get()
-            ->pluck('count', 'status');
+        return $this->uptimes([7])[0];
+    }
 
-        $counts[Heartbeat::STATUS_UP] ??= 0;
-        $counts[Heartbeat::STATUS_DOWN] ??= 0;
+    public function uptimes(array $intervals)
+    {
+        return collect($intervals)->map(function ($interval) {
+            $counts = $this
+                ->hasMany(Heartbeat::class)
+                ->selectRaw('status, count(*) as count')
+                ->whereBetween('created_at', [carbon()->subDays($interval), carbon()])
+                ->groupBy('status')
+                ->get()
+                ->pluck('count', 'status');
 
-        try {
-            return round($counts[Heartbeat::STATUS_UP] / ($counts[Heartbeat::STATUS_UP] + $counts[Heartbeat::STATUS_DOWN]) * 100, 2);
-        } catch (\Throwable $th) {
-            return -1;
-        }
+            $counts[Heartbeat::STATUS_UP] ??= 0;
+            $counts[Heartbeat::STATUS_DOWN] ??= 0;
+
+            try {
+                return round($counts[Heartbeat::STATUS_UP] / ($counts[Heartbeat::STATUS_UP] + $counts[Heartbeat::STATUS_DOWN]) * 100, 2);
+            } catch (\Throwable $th) {
+                return -1;
+            }
+        });
     }
 }
