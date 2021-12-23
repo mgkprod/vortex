@@ -5,7 +5,7 @@
     <div class="flex flex-col items-center w-full">
       <div class="px-4 py-3 mb-8">
         <inertia-link :href="route('index')">
-          <img src="/images/logo_on_white.svg" class="h-10" />
+          <img src="/images/logo_alt.svg" class="h-12" />
         </inertia-link>
       </div>
 

@@ -2,10 +2,10 @@
   <div class="flex flex-col min-h-screen">
     <nav>
       <div class="bg-[#1D1C29] text-[#ACACBB]">
-        <div class="container px-8 py-8 mx-auto">
+        <div class="container px-8 py-6 mx-auto">
           <div class="flex items-center justify-center">
             <inertia-link :href="route('index')">
-              <img src="/images/logo.svg" class="h-6" />
+              <img src="/images/logo.svg" class="h-8" />
             </inertia-link>
           </div>
         </div>
