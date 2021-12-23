@@ -54,7 +54,7 @@ class CheckMonitorJob implements ShouldQueue
                 }
 
                 break;
-            case Monitor::TYPE_PING:
+            case Monitor::TYPE_PORT:
                 $responseTime = ping_host(
                     $this->monitor->configuration['host'],
                     $this->monitor->configuration['port']

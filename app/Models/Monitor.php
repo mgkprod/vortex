@@ -12,12 +12,12 @@ class Monitor extends Model
 
     const TYPE_HTTP = 1;
     const TYPE_KEYWORD = 2;
-    const TYPE_PING = 3;
+    const TYPE_PORT = 3;
 
     const TYPES = [
         self::TYPE_HTTP => 'HTTP(s)',
         self::TYPE_KEYWORD => 'Keyword',
-        self::TYPE_PING => 'Ping',
+        self::TYPE_PORT => 'Port',
     ];
 
     protected $casts = [
