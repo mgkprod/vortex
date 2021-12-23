@@ -30,18 +30,32 @@ class CheckMonitorJob implements ShouldQueue
         $heartbeat->monitor()->associate($this->monitor);
 
         if ($this->monitor->type == Monitor::TYPE_HTTP || $this->monitor->type == Monitor::TYPE_KEYWORD) {
-            $response = Http::get($this->monitor->configuration['host']);
+            try {
+                $response = Http::get($this->monitor->configuration['host']);
 
-            $heartbeat->response_time = $response->handlerStats()['total_time'];
-            $heartbeat->data = ['httpCode' => $response->handlerStats()['http_code']];
+                $heartbeat->response_time = $response->handlerStats()['total_time'];
+                $heartbeat->data = ['httpCode' => $response->handlerStats()['http_code']];
+            } catch (\Throwable $th) {
+                $heartbeat->response_time = -1;
+                $heartbeat->data = [];
+                $heartbeat->status = Heartbeat::STATUS_DOWN;
+            }
         }
 
         switch ($this->monitor->type) {
             case Monitor::TYPE_HTTP:
+                if ($heartbeat->response_time == -1) {
+                    break;
+                }
+
                 $heartbeat->status = $response->successful() ? Heartbeat::STATUS_UP : Heartbeat::STATUS_DOWN;
 
                 break;
             case Monitor::TYPE_KEYWORD:
+                if ($heartbeat->response_time == -1) {
+                    break;
+                }
+
                 $contains = Str::contains($response->body(), $this->monitor->configuration['keyword']);
 
                 if (
@@ -55,10 +69,14 @@ class CheckMonitorJob implements ShouldQueue
 
                 break;
             case Monitor::TYPE_PORT:
-                $responseTime = ping_host(
-                    $this->monitor->configuration['host'],
-                    $this->monitor->configuration['port']
-                );
+                try {
+                    $responseTime = ping_host(
+                        $this->monitor->configuration['host'],
+                        $this->monitor->configuration['port']
+                    );
+                } catch (\Throwable $th) {
+                    $responseTime = -1;
+                }
 
                 $heartbeat->status = $responseTime != -1 ? Heartbeat::STATUS_UP : Heartbeat::STATUS_DOWN;
                 $heartbeat->response_time = ($responseTime / 1000);
