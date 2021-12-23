@@ -17,7 +17,7 @@ class CreateHeartbeatsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('monitor_id');
             $table->unsignedTinyInteger('status');
-            $table->unsignedFloat('response_time');
+            $table->float('response_time');
             $table->json('data')->nullable();
             $table->timestamp('created_at');
         });
