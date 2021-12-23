@@ -46,7 +46,7 @@ class CheckMonitorJob implements ShouldQueue
 
                 if (
                     ($this->monitor->configuration['fails'] == 'exists' && $contains)
-                    || ($this->monitor->configuration['fails'] == 'notExists' && ! $contains)
+                    || ($this->monitor->configuration['fails'] == 'missing' && ! $contains)
                  ) {
                     $heartbeat->status = Heartbeat::STATUS_DOWN;
                 } else {

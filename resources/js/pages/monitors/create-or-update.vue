@@ -35,7 +35,7 @@
             <template v-if="form.type == 2">
               <form-input :flex="true" :required="true" label="URL (or IP)" type="text" placeholder="https://mgk.dev" v-model="form.host" :error="form.errors.host" />
               <form-input :flex="true" :required="true" label="Keyword" type="text" placeholder="Expert Laravel" v-model="form.keyword" :error="form.errors.keyword" />
-              <form-radio :flex="true" :required="true" label="Alert when" v-model="form.fails" :error="form.errors.fails" :options="{ exists: 'Keyword exists', notExists: 'Keyword not exists' }" />
+              <form-radio :flex="true" :required="true" label="Alert when" v-model="form.fails" :error="form.errors.fails" :options="{ exists: 'Keyword exists', missing: 'Keyword is missing' }" />
             </template>
             <template v-if="form.type == 3">
               <form-input :flex="true" :required="true" label="Host (or URL or IP)" type="text" placeholder="saucisson.o2switch.net" v-model="form.host" :error="form.errors.host" />
