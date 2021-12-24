@@ -41,22 +41,7 @@ class MonitorController extends Controller
     public function store()
     {
         $this->validateRequest();
-
-        $monitor = new Monitor();
-        $monitor->type = request()->type;
-        $monitor->name = request()->name;
-
-        $configuration = $monitor->configuration ?? [];
-
-        $configuration['host'] = request()->host;
-        $configuration['keyword'] = request()->keyword;
-        $configuration['fails'] = request()->fails;
-        $configuration['port'] = request()->port;
-
-        $monitor->configuration = $configuration;
-
-        $monitor->user()->associate(auth()->user());
-        $monitor->save();
+        $monitor = $this->fillFromRequest(new Monitor());
 
         return redirect()->route('monitors.index')->with('success', 'Monitor sucessfuly created.');
     }
@@ -77,18 +62,7 @@ class MonitorController extends Controller
             ->checkMonitorOwnership($monitor)
             ->validateRequest();
 
-        $monitor->type = request()->type;
-        $monitor->name = request()->name;
-
-        $configuration = $monitor->configuration ?? [];
-
-        $configuration['host'] = request()->host;
-        $configuration['keyword'] = request()->keyword;
-        $configuration['fails'] = request()->fails;
-        $configuration['port'] = request()->port;
-
-        $monitor->configuration = $configuration;
-        $monitor->save();
+        $monitor = $this->fillFromRequest($monitor);
 
         return redirect()->route('monitors.show', $monitor)->with('success', 'Monitor sucessfuly updated.');
     }
@@ -117,7 +91,7 @@ class MonitorController extends Controller
         $userMonitors = ($user ?? auth()->user())->monitors()->select('id')->pluck('id');
 
         if (! $userMonitors->contains($monitor->id)) {
-            abort(403, '');
+            abort(403, );
         }
 
         return $this;
@@ -133,5 +107,25 @@ class MonitorController extends Controller
             'fails' => ['required_if:type,2'],
             'port' => ['required_if:type,3'],
         ]);
+    }
+
+    protected function fillFromRequest(Monitor $monitor)
+    {
+        $monitor->type = request()->type;
+        $monitor->name = request()->name;
+
+        $configuration = $monitor->configuration ?? [];
+
+        $configuration['host'] = request()->host;
+        $configuration['keyword'] = request()->keyword;
+        $configuration['fails'] = request()->fails;
+        $configuration['port'] = request()->port;
+
+        $monitor->configuration = $configuration;
+
+        $monitor->user()->associate(auth()->user());
+        $monitor->save();
+
+        return $monitor;
     }
 }
