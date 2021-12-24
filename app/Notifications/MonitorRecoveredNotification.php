@@ -19,4 +19,20 @@ class MonitorRecoveredNotification extends MonitorNotification
             ]
         );
     }
+
+    public function toDiscord($notifiable)
+    {
+        return array_merge(
+            parent::toDiscord($notifiable),
+            [
+                'embed' => [
+                    'title' => 'Monitor is UP 🎉🎉',
+                    'fields' => [
+                        ['name' => 'Monitor', 'value' => $notifiable->name],
+                        ['name' => 'Was down for', 'value' => $this->durationForHumans],
+                    ],
+                ],
+            ]
+        );
+    }
 }

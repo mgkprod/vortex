@@ -45,4 +45,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Monitor::class);
     }
+
+    public function contacts()
+    {
+        return $this->hasMany(Contact::class);
+    }
 }

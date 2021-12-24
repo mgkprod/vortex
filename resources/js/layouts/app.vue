@@ -16,6 +16,7 @@
             <div class="flex flex-row items-center space-x-1">
               <inertia-link :href="route('overview')" :class="{ 'bg-[#3B3A4A]': route().current('overview*') }" class="inline-block px-4 py-2 text-sm font-bold transition duration-200 ease-in-out rounded-md hover:bg-[#3B3A4A]"> <i class="mr-1 opacity-50 fas fa-chart-line"></i> Overview </inertia-link>
               <inertia-link :href="route('monitors.index')" :class="{ 'bg-[#3B3A4A]': route().current('monitors*') }" class="inline-block px-4 py-2 text-sm font-bold transition duration-200 ease-in-out rounded-md hover:bg-[#3B3A4A]"> <i class="mr-1 opacity-50 fas fa-chart-line"></i> Monitors </inertia-link>
+              <inertia-link :href="route('contacts.index')" :class="{ 'bg-[#3B3A4A]': route().current('contacts*') }" class="inline-block px-4 py-2 text-sm font-bold transition duration-200 ease-in-out rounded-md hover:bg-[#3B3A4A]"> <i class="mr-1 opacity-50 fas fa-users"></i> Contacts </inertia-link>
             </div>
 
             <button type="button" class="inline-block px-4 py-2 text-sm font-bold transition duration-200 ease-in-out rounded-md hover:bg-[#3B3A4A] focus:outline-none" @click="$inertia.post(route('logout'))"><i class="fas fa-sign-out-alt"></i></button>
@@ -32,7 +33,7 @@
 
     <footer class="container flex flex-row justify-between w-full px-8 py-8 mx-auto mt-auto text-xs text-center text-[#979BAE]">
       <div>{{ $page.props.appVersion }}</div>
-      <div>Made with ♥ by <a href="https://mgk.dev" class="transition duration-200 ease-in-out border-b border-current hover:opacity-80" target="_blank">Simon Rubuano</a> as <a href="https://github.com/mgkprod/Vortex" class="transition duration-200 ease-in-out border-b border-current hover:opacity-80" target="_blank">open-source software</a>.</div>
+      <div>Made with ♥ by <a href="https://mgk.dev" class="transition duration-200 ease-in-out border-b border-current hover:opacity-80" target="_blank">Simon Rubuano</a> as <a href="https://github.com/mgkprod/vortex" class="transition duration-200 ease-in-out border-b border-current hover:opacity-80" target="_blank">open-source software</a>.</div>
     </footer>
   </div>
 </template>

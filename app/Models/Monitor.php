@@ -39,6 +39,11 @@ class Monitor extends Model
         return $this->hasMany(Heartbeat::class)->orderByDesc('created_at');
     }
 
+    public function contacts()
+    {
+        return $this->belongsToMany(Contact::class);
+    }
+
     public function getUptimeAttribute()
     {
         return $this->uptimes([7])[0];

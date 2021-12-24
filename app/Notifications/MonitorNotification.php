@@ -2,6 +2,8 @@
 
 namespace App\Notifications;
 
+use App\Channels\DiscordChannel;
+use App\Models\Contact;
 use App\Models\Heartbeat;
 use Carbon\CarbonInterval;
 use Illuminate\Bus\Queueable;
@@ -33,7 +35,15 @@ class MonitorNotification extends Notification
 
     public function via($notifiable)
     {
-        return ['database'];
+        $via = ['database'];
+
+        $contacts = $notifiable->contacts;
+
+        if ($contacts->where('type', Contact::TYPE_DISCORD)->count()) {
+            $via[] = DiscordChannel::class;
+        }
+
+        return $via;
     }
 
     public function toArray($notifiable)
@@ -41,6 +51,14 @@ class MonitorNotification extends Notification
         return [
             'status' => $this->heartbeat->status,
             'duration' => $this->duration,
+        ];
+    }
+
+    public function toDiscord($notifiable)
+    {
+        return [
+            'content' => null,
+            'type' => $this->heartbeat->status ? 'success' : 'error',
         ];
     }
 }

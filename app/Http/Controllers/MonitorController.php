@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Monitor;
 use App\Models\User;
+use Illuminate\Validation\Rule;
 
 class MonitorController extends Controller
 {
@@ -33,8 +34,15 @@ class MonitorController extends Controller
 
     public function create()
     {
+        $contacts = auth()->user()
+            ->contacts()
+            ->orderBy('created_at', 'DESC')
+            ->get()
+            ->pluck('name', 'id');
+
         return inertia('monitors/create-or-update', [
             'types' => Monitor::TYPES,
+            'contacts' => $contacts,
         ]);
     }
 
@@ -50,9 +58,18 @@ class MonitorController extends Controller
     {
         $this->checkMonitorOwnership($monitor);
 
+        $monitor->contactIds = $monitor->contacts->pluck('id');
+
+        $contacts = auth()->user()
+            ->contacts()
+            ->orderBy('created_at', 'DESC')
+            ->get()
+            ->pluck('name', 'id');
+
         return inertia('monitors/create-or-update', [
             'monitor' => $monitor,
             'types' => Monitor::TYPES,
+            'contacts' => $contacts,
         ]);
     }
 
@@ -99,13 +116,21 @@ class MonitorController extends Controller
 
     protected function validateRequest()
     {
+        $contacts = auth()->user()
+            ->contacts()
+            ->orderBy('created_at', 'DESC')
+            ->select('id')->pluck('id');
+
         request()->validate([
             'type' => ['required'],
             'name' => ['required'],
+
             'host' => ['required_if:type,' . Monitor::TYPE_HTTP . ',' . Monitor::TYPE_KEYWORD . ',' . Monitor::TYPE_PORT],
             'keyword' => ['required_if:type,' . Monitor::TYPE_KEYWORD],
             'fails' => ['required_if:type,' . Monitor::TYPE_KEYWORD],
             'port' => ['required_if:type,' . Monitor::TYPE_PORT],
+
+            'contacts.*' => ['nullable', Rule::in($contacts)],
         ]);
     }
 
@@ -126,6 +151,7 @@ class MonitorController extends Controller
         $monitor->configuration = $configuration;
 
         $monitor->user()->associate(auth()->user());
+        $monitor->contacts()->sync(request()->contacts);
         $monitor->save();
 
         return $monitor;

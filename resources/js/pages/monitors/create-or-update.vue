@@ -42,6 +42,8 @@
               <form-input :flex="true" :required="true" label="Port" type="text" placeholder="2083" v-model="form.port" :error="form.errors.port" />
             </template>
           </div>
+
+          <form-checkbox :flex="true" label="Contacts to alert" v-model="form.contacts" :error="form.errors.contacts" :options="$page.props.contacts" />
         </div>
         <hr class="w-full border-[#f3f6f9]" />
         <div class="flex justify-end p-6">
@@ -56,7 +58,7 @@
 export default {
   layout: require('../../layouts/app').default,
 
-  props: ['monitor', 'types'],
+  props: ['monitor', 'types', 'contacts'],
 
   data() {
     return {
@@ -69,6 +71,8 @@ export default {
         keyword: '',
         fails: '',
         port: '',
+
+        contacts: [],
       }),
     };
   },
@@ -82,6 +86,8 @@ export default {
       this.form.keyword = this.monitor.configuration.keyword || '';
       this.form.fails = this.monitor.configuration.fails || '';
       this.form.port = this.monitor.configuration.port || '';
+
+      this.form.contacts = this.monitor.contactIds || [];
     }
   },
 

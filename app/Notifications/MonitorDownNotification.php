@@ -18,4 +18,19 @@ class MonitorDownNotification extends MonitorNotification
             ]
         );
     }
+
+    public function toDiscord($notifiable)
+    {
+        return array_merge(
+            parent::toDiscord($notifiable),
+            [
+                'embed' => [
+                    'title' => 'Monitor is DOWN 😭😭',
+                    'fields' => [
+                        ['name' => 'Monitor', 'value' => $notifiable->name],
+                    ],
+                ],
+            ]
+        );
+    }
 }
