@@ -105,7 +105,7 @@ class MonitorController extends Controller
             'host' => ['required_if:type,' . Monitor::TYPE_HTTP . ',' . Monitor::TYPE_KEYWORD . ',' . Monitor::TYPE_PORT],
             'keyword' => ['required_if:type,' . Monitor::TYPE_KEYWORD],
             'fails' => ['required_if:type,' . Monitor::TYPE_KEYWORD],
-            'port' => ['required_if:type,' . MOnitor::TYPE_PORT],
+            'port' => ['required_if:type,' . Monitor::TYPE_PORT],
         ]);
     }
 
