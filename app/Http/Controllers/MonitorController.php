@@ -102,10 +102,10 @@ class MonitorController extends Controller
         request()->validate([
             'type' => ['required'],
             'name' => ['required'],
-            'host' => ['required_if:type,1,2,3'],
-            'keyword' => ['required_if:type,2'],
-            'fails' => ['required_if:type,2'],
-            'port' => ['required_if:type,3'],
+            'host' => ['required_if:type,' . Monitor::TYPE_HTTP . ',' . Monitor::TYPE_KEYWORD . ',' . Monitor::TYPE_PORT],
+            'keyword' => ['required_if:type,' . Monitor::TYPE_KEYWORD],
+            'fails' => ['required_if:type,' . Monitor::TYPE_KEYWORD],
+            'port' => ['required_if:type,' . MOnitor::TYPE_PORT],
         ]);
     }
 
