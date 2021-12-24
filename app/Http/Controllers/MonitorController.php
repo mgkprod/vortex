@@ -114,12 +114,14 @@ class MonitorController extends Controller
         $monitor->type = request()->type;
         $monitor->name = request()->name;
 
-        $configuration = $monitor->configuration ?? [];
+        $configuration = collect($monitor->configuration ?? []);
 
         $configuration['host'] = request()->host;
         $configuration['keyword'] = request()->keyword;
         $configuration['fails'] = request()->fails;
         $configuration['port'] = request()->port;
+
+        $configuration = $configuration->filter();
 
         $monitor->configuration = $configuration;
 
